@@ -1,67 +1,86 @@
 import SwiftUI
 import VisionKit
 
-struct VisionWindowView: View {
-    @State private var isDetailViewPresented = false
-
+struct Inicio: View {
+    @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissWindow) private var dismissWindow
     var body: some View {
-        VStack {
-            Text("Bem-vindo ao Slap")
+        VStack(spacing: 25){
+            Text("Slap")
                 .font(.largeTitle)
-                .padding()
-            Text("Aqui você treina sua coordenação de forma ritmica e divertida,\n acerte as esferas para continuar a música.")
+                .bold()
+                .padding(.top,220)
+            Image(systemName: "globe")
+                .resizable()
+                .frame(width: 400,height: 400)
+            Text("Bata com sua mão esquerda e direita na ordem\n e no momento certo quando os blocos vierem\n na sua direção")
+                .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
+                .font(.title)
+                .frame(width: 1000,height: 100)
+            
             Button(
                 action: {
-                    isDetailViewPresented = true
-            },
-                   label: {
-                      Text("START")
-                           .foregroundStyle(.white)
-                           .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(width: 100,height: 40)
+                    openWindow(id: "PauseWindow")
+                },
+                label: {
+                    Text("Jogar")
+                        .foregroundStyle(.white)
+                        .background(
+                            RoundedRectangle(cornerRadius: 50)
+                                .frame(width: 270,height: 50)
                                 .foregroundStyle(.pink)
-                           )
-                        
-                   }
+                        )
+                    
+                }
                 
-            )
-            VStack{
-                Text("teste")
-            }
-            .frame(width: 400, height: 400) // Tamanho da janela
-            .background(Color.orange)
-            .cornerRadius(40)
-            .shadow(radius: 10)
-            .offset(x:-700)
+            ).padding()
+        }.onAppear{
+            dismissWindow(id: "PauseWindow")
         }
-        .frame(width: 1000, height: 1000)
-        .background(Color.orange)// Tamanho da janela
-        .cornerRadius(40)
-        .shadow(radius: 10)
-        .sheet(isPresented: $isDetailViewPresented) {
-            DetailView()
+    }
+}
+struct VisionWindowView: App {
+    var body: some Scene {
+        WindowGroup(id: "inicio") {
+            Inicio()
+          
         }
-       
         
     }
-    
 }
 
-struct DetailView: View {
+struct PauseView: View {
+    @Environment(\.dismissWindow) private var dismissWindow
+    @Environment(\.openWindow) private var openWindow
+    @State var start: Bool = true
     var body: some View {
-        VStack {
-            Text("Nova Tela!")
-                .font(.largeTitle)
-                .padding()
-            // Adicione mais conteúdo aqui
+        VStack(spacing: 40){
+            PauseButton(start: $start)
+            Button(
+                action: {
+                    
+                    openWindow(id: "Inicio")
+                    
+                },
+                label: {
+                    RoundedRectangle(cornerRadius: 100)
+                        .overlay{
+                            Text("Sair")
+                                .foregroundStyle(.white)
+                        }
+                        .frame(width: 320,height: 51)
+                        .foregroundStyle(.gray)
+                }
+            )
+        }
+        .buttonStyle(.plain)
+        .onAppear {
+            dismissWindow(id: "Inicio")
         }
     }
 }
 
-#Preview {
-    VisionWindowView()
-        .frame(minWidth: 1000,minHeight: 1000) // Tamanho mínimo da janela
-        .preferredColorScheme(.light) // Use .dark para o modo escuro
+#Preview(windowStyle: .automatic){
+    Inicio()
 }
