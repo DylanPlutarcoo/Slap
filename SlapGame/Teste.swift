@@ -1,67 +1,111 @@
 import SwiftUI
 import VisionKit
 
-struct VisionWindowView: View {
-    @State private var isDetailViewPresented = false
-
+struct Inicio: View {
+    @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissWindow) private var dismissWindow
+    @Environment(\.openImmersiveSpace) private var openImmersiveSpace
+    @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
+    @State private var isImmersiveSpaceOpen = false
     var body: some View {
-        VStack {
-            Text("Bem-vindo ao Slap")
+        VStack(spacing: 25){
+            Text("Slap")
                 .font(.largeTitle)
-                .padding()
-            Text("Aqui você treina sua coordenação de forma ritmica e divertida,\n acerte as esferas para continuar a música.")
+                .bold()
+            Image(systemName: "globe")
+                .resizable()
+                .frame(maxWidth: 400,maxHeight: 400)
+            Text("Bata com sua mão esquerda e direita na ordem\n e no momento certo quando os blocos vierem\n na sua direção")
+                .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
+                .font(.title)
             Button(
                 action: {
-                    isDetailViewPresented = true
-            },
-                   label: {
-                      Text("START")
-                           .foregroundStyle(.white)
-                           .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(width: 100,height: 40)
-                                .foregroundStyle(.pink)
-                           )
-                        
-                   }
-                
+//                    dismissWindow()
+                    openWindow(id: "PauseWindow")
+                    Task {
+                        if isImmersiveSpaceOpen == false {
+                            await openImmersiveSpace(id:"ShapesView")
+                            dismissWindow(id: "Inicio")
+                        }
+                    }
+//                    Task {
+////                        if isImmersiveSpaceOpen {
+////                            await dismissImmersiveSpace()
+//                        let result = await openImmersiveSpace(id: "ShapesView")
+//                        switch result {
+//                        case .opened:
+//                            isImmersiveSpaceOpen = true
+//                        case .userCancelled, .error:
+//                            isImmersiveSpaceOpen = false
+//                        @unknown default:
+//                            isImmersiveSpaceOpen = false
+//                        }
+//                    }
+//                        } else {
+//                        isImmersiveSpaceOpen = true
+                },
+                label: {
+                    Text("Jogar")
+                        .foregroundStyle(.white)
+                        .frame(width: 270,height: 50)
+                }
             )
-            VStack{
-                Text("teste")
-            }
-            .frame(width: 400, height: 400) // Tamanho da janela
-            .background(Color.orange)
-            .cornerRadius(40)
-            .shadow(radius: 10)
-            .offset(x:-700)
+            .padding()
+            .controlSize(.extraLarge)
+            .buttonBorderShape(.capsule)
         }
-        .frame(width: 1000, height: 1000)
-        .background(Color.orange)// Tamanho da janela
-        .cornerRadius(40)
-        .shadow(radius: 10)
-        .sheet(isPresented: $isDetailViewPresented) {
-            DetailView()
-        }
-       
-        
+//        .onAppear{
+//            dismissWindow(id: "PauseWindow")
+//            Task {
+//                if isImmersiveSpaceOpen {
+//                    await dismissImmersiveSpace()
+//                }
+//            }
+//        }
     }
-    
 }
-
-struct DetailView: View {
+//struct VisionWindowView: App {
+//    var body: some Scene {
+//        WindowGroup(id: "inicio") {
+//            Inicio()
+//        }
+//    }
+//}
+struct PauseView: View {
+    @Environment(\.dismissWindow) private var dismissWindow
+    @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
+    @State var start: Bool = true
     var body: some View {
-        VStack {
-            Text("Nova Tela!")
-                .font(.largeTitle)
-                .padding()
-            // Adicione mais conteúdo aqui
+        VStack(spacing: 40){
+            PauseButton(start: $start)
+            Button(
+                action: {
+                    Task {
+                        dismissWindow()
+                        await dismissImmersiveSpace()
+                        openWindow(id: "Inicio")
+                    }
+                },
+                label: {
+                    RoundedRectangle(cornerRadius: 100)
+                        .overlay{
+                            Text("Sair")
+                                .foregroundStyle(.white)
+                        }
+                        .frame(width: 320,height: 51)
+                        .foregroundStyle(.gray)
+                }
+            )
         }
+        .buttonStyle(.plain)
+//        .onAppear {
+//            dismissWindow(id: "Inicio")
+//        }
     }
 }
 
-#Preview {
-    VisionWindowView()
-        .frame(minWidth: 1000,minHeight: 1000) // Tamanho mínimo da janela
-        .preferredColorScheme(.light) // Use .dark para o modo escuro
+#Preview(windowStyle: .automatic){
+    Inicio()
 }
