@@ -12,28 +12,31 @@ import RealityKit
 struct ShapesView: View {
     var body: some View {
         RealityView { content in
-            addGeometryShapes(to: content)
+//            addGeometryShapes(to: content)
+            let sphere1 = ShapesView.createSphereEntity()
+//            let sphere2 = ShapesView.createSphereEntity()
+            content.add(sphere1)
+//            content.add =
         }
     }
 
-
     // Positions and adds all geometric shapes to the scene.
-    func addGeometryShapes(to content: RealityViewContent) {
-        /// An array of all the 3D entities representing different shapes.
-        let allGeometryEntities = [
-            ShapesView.createSphereEntity(),
-            ShapesView.createSphereEntity()
-        ]
-
-        let xOffsets: [Float] = [-0.1, 0.1] // Ajuste esses valores para centralizar as esferas
-
-                // Define as posições e adiciona as esferas ao conteúdo
-                for (index, entity) in allGeometryEntities.enumerated() {
-                    entity.position.x = xOffsets[index]
-                    content.add(entity)
-                }
-    }
+//    func addGeometryShapes(to content: RealityViewContent) {
+//        / An array of all the 3D entities representing different shapes.
+//        let allGeometryEntities = [
+//            ShapesView.createSphereEntity(),
+//            ShapesView.createSphereEntity()
+//        ]
+//
+//        //let xOffsets: [Float] = [/*-0.1, 0.1, 0*/0.5, 2, 0.5] // Ajuste esses valores para centralizar as esferas
+//
+//                // Define as posições e adiciona as esferas ao conteúdo
+//        for (/*index, */entity) in allGeometryEntities.enumerated() {
+////                    entity.position.x = xOffsets[index]
+//            content.add(entity)
+//        }
+//    }
 }
-#Preview(windowStyle: .automatic) {
+#Preview(/*windowStyle: .automatic*/) {
     ShapesView()
 }
