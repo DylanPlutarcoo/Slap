@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "handSlapIcon.png",
       "idiom" : "vision",
       "scale" : "2x"
     }
