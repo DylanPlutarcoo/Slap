@@ -17,11 +17,7 @@ import SwiftUI
 //}
 @main
 struct MyVisionApp: App {
-//    @State var isImmersiveSpaceOpen = false
     var body: some Scene {
-//        WindowGroup(id: WindowName.start.realName) {
-//            ContentView()
-//        }
         WindowGroup(id: WindowName.start.realName) {
             Inicio()
         }
@@ -33,7 +29,6 @@ struct MyVisionApp: App {
         ImmersiveSpace(id: WindowName.immersiveSpace.realName) {
             ShapesView()
         }
-//        .defaultSize(width: 3, height: 3, depth: 3, in: .meters)
     }
 }
 

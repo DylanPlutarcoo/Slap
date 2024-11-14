@@ -21,30 +21,30 @@ struct ShapesView: View {
     
     var body: some View {
         RealityView { content in
-            let ballMesh = MeshResource.generateSphere(radius: 0.3)
+            let ballMesh = MeshResource.generateSphere(radius: 0.2)
             
             let sphere1 = ModelEntity(mesh: ballMesh,materials: [redMaterial])
             sphere1.components.set(InputTargetComponent())
-            sphere1.components.set(CollisionComponent(shapes: [.generateSphere(radius: 0.3)]))
-            sphere1.position = SIMD3(x: -0.5, y: 1.0, z: -1.5)
+            sphere1.components.set(CollisionComponent(shapes: [.generateSphere(radius: 0.2)]))
+            sphere1.position = SIMD3(x: -0.5, y: 0.8, z: -1.5)
             content.add(sphere1)
             
             let sphere2 = ModelEntity(mesh: ballMesh, materials: [yellowMaterial])
             sphere2.components.set(InputTargetComponent())
-            sphere2.components.set(CollisionComponent(shapes: [.generateSphere(radius: 0.3)]))
-            sphere2.position = SIMD3(x: 0.5, y: 1.0, z: -1.5)
+            sphere2.components.set(CollisionComponent(shapes: [.generateSphere(radius: 0.2)]))
+            sphere2.position = SIMD3(x: 0.5, y: 0.8, z: -1.5)
             content.add(sphere2)
         } update: { content in
             if let sphere1 = content.entities.first {
                 sphere1.components.set(ModelComponent(
-                    mesh: .generateSphere(radius: 0.3),
+                    mesh: .generateSphere(radius: 0.2),
                     materials: [changeSphere1 ? yellowMaterial : redMaterial])
                 )
             }
             if content.entities.count > 1{
                 let sphere2 = content.entities[1]
                 sphere2.components.set(ModelComponent(
-                    mesh: .generateSphere(radius: 0.3),
+                    mesh: .generateSphere(radius: 0.2),
                     materials: [changeSphere2 ? yellowMaterial : redMaterial]
                 ))
             }

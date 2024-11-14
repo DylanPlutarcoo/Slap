@@ -10,18 +10,21 @@ struct Inicio: View {
     var body: some View {
         VStack(spacing: 25){
             Text("Slap")
-                .font(.largeTitle)
+                .font(.extraLargeTitle)
                 .bold()
-            Image(systemName: "globe")
+                .foregroundStyle(.orange)
+            Image(systemName: "hand.raised.fill")
                 .resizable()
-                .frame(maxWidth: 400,maxHeight: 400)
-            Text("Bata com sua mão esquerda e direita na ordem\n e no momento certo quando os blocos vierem\n na sua direção")
+                .frame(width:445, height: 360,alignment: .center)
+                .foregroundStyle(.orange)
+//                .frame(maxWidth: 400,maxHeight: 400)
+//            Text("Bata com sua mão esquerda e direita na ordem\n e no momento certo quando os blocos vierem\n na sua direção")
+            Text("Aperte as esferas à sua direita e à sua esquerda")
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
-                .font(.title)
+                .font(.largeTitle)
             Button(
                 action: {
-//                    dismissWindow()
                     openWindow(id: "PauseWindow")
                     Task {
                         if isImmersiveSpaceOpen == false {
@@ -29,21 +32,6 @@ struct Inicio: View {
                             dismissWindow(id: "Inicio")
                         }
                     }
-//                    Task {
-////                        if isImmersiveSpaceOpen {
-////                            await dismissImmersiveSpace()
-//                        let result = await openImmersiveSpace(id: "ShapesView")
-//                        switch result {
-//                        case .opened:
-//                            isImmersiveSpaceOpen = true
-//                        case .userCancelled, .error:
-//                            isImmersiveSpaceOpen = false
-//                        @unknown default:
-//                            isImmersiveSpaceOpen = false
-//                        }
-//                    }
-//                        } else {
-//                        isImmersiveSpaceOpen = true
                 },
                 label: {
                     Text("Jogar")
@@ -55,23 +43,9 @@ struct Inicio: View {
             .controlSize(.extraLarge)
             .buttonBorderShape(.capsule)
         }
-//        .onAppear{
-//            dismissWindow(id: "PauseWindow")
-//            Task {
-//                if isImmersiveSpaceOpen {
-//                    await dismissImmersiveSpace()
-//                }
-//            }
-//        }
     }
 }
-//struct VisionWindowView: App {
-//    var body: some Scene {
-//        WindowGroup(id: "inicio") {
-//            Inicio()
-//        }
-//    }
-//}
+
 struct PauseView: View {
     @Environment(\.dismissWindow) private var dismissWindow
     @Environment(\.openWindow) private var openWindow
@@ -100,9 +74,6 @@ struct PauseView: View {
             )
         }
         .buttonStyle(.plain)
-//        .onAppear {
-//            dismissWindow(id: "Inicio")
-//        }
     }
 }
 
