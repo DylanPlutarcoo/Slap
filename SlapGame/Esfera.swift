@@ -12,13 +12,24 @@ import RealityKit
 struct ShapesView: View {
     //    @State private var sphere1: ModelEntity
     //    @State private var sphere2: ModelEntity
+    
+    @StateObject var soundViewModel = SoundViewModel()
+    @StateObject var music = Musica(timer: Timer())
+    @State var colorLeft: UIColor = .gray
+    @State var colorRight: UIColor = .gray
     @State private var sphereMaterial = SimpleMaterial()
     @State private var changeSphere1 = false
     @State private var changeSphere2 = false
     
-    let yellowMaterial = SimpleMaterial(color: .yellow, isMetallic: false)
-    let redMaterial = SimpleMaterial(color: .red, isMetallic: false)
-    
+    var yellowMaterial: SimpleMaterial {
+            SimpleMaterial(color: colorLeft, isMetallic: false)
+        }
+    var redMaterial: SimpleMaterial {
+            SimpleMaterial(color: colorRight, isMetallic: false)
+        }
+//    let yellowMaterial = SimpleMaterial(color: .yellow, isMetallic: false)
+//    let redMaterial = SimpleMaterial(color: .red, isMetallic: false)
+//    
     var body: some View {
         RealityView { content in
             let ballMesh = MeshResource.generateSphere(radius: 0.2)
@@ -48,12 +59,47 @@ struct ShapesView: View {
                     materials: [changeSphere2 ? yellowMaterial : redMaterial]
                 ))
             }
+        }.onChange(of: music.elapsedTime) {
+            print(music.elapsedTime)
+            if let first =  music.correctTimeLeft.first(where: {$0 >= music.elapsedTime}) {
+                if Double(first) - music.elapsedTime <= 1.0 {
+                    colorLeft =  .orange
+                }else {
+                    colorLeft = .gray
+                }
+            }
+
+            if let first =  music.correctTimeRight.first(where: {$0 >= music.elapsedTime}) {
+                if music.elapsedTime - Double(first) <= 1.0 {
+                    colorRight =  .orange
+                }else {
+                    colorRight = .gray
+                }
+            
+            if music.elapsedTime == 0.9 {
+                colorLeft = . orange
+            }
+        }
+    }
+        .onAppear{
+            soundViewModel.playSound(sound: "sound")
+            music.startTimer()
         }
         .gesture(TapGesture().targetedToAnyEntity().onEnded { entity in
             if entity.entity.position.x < 0 {
                 changeSphere1.toggle()
+                music.click = music.elapsedTime
+                colorLeft = music.checkClick(click: music.click, time: music.correctTimeLeft,color: colorLeft)
+                if colorLeft == .green {
+                    music.points += 10
+                }
             } else if entity.entity.position.x > 0 {
                 changeSphere2.toggle()
+                music.click = music.elapsedTime
+                colorRight = music.checkClick(click: music.click, time: music.correctTimeRight,color: colorRight)
+                if colorRight == .green {
+                    music.points += 10
+                }
             }
         })
 //            if let model = content.entities.first {

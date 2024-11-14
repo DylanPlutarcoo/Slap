@@ -9,10 +9,14 @@ import SwiftUI
 
 struct PauseButton: View {
     @Binding var start: Bool
+    var actionSom: () -> Void
+    var actionTimer: () -> Void
     var body: some View {
         Button(
             action: {
                 start.toggle()
+                actionSom()
+                actionTimer()
             },
             label: {
                 Circle()
@@ -31,5 +35,5 @@ struct PauseButton: View {
 }
 
 #Preview {
-    PauseButton(start: .constant(true))
+    PauseButton(start: .constant(true), actionSom: {},actionTimer: {})
 }

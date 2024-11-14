@@ -25,9 +25,13 @@ struct MyVisionApp: App {
         
         WindowGroup(id: WindowName.pause.realName) {
             PauseView()
+                .environmentObject(SoundViewModel())
+                .environmentObject(Musica(timer: Timer()))
         }.defaultSize(width: 577, height: 582)
         ImmersiveSpace(id: WindowName.immersiveSpace.realName) {
             ShapesView()
+                .environmentObject(SoundViewModel())
+                .environmentObject(Musica(timer: Timer()))
         }
     }
 }
